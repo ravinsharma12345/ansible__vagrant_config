@@ -1,0 +1,17 @@
+---
+- name: plyabook testing
+  hosts: localhost
+
+  tasks:
+    - name: Install busybox
+      apt: pkg=curl state=present
+      sudo: yes
+
+# # this is the playbook mode
+#   task:
+#     - name: install apache
+#       yum: name=httpd state=present
+
+#     - name: start httpd
+#       service: name=httpd state=running
+

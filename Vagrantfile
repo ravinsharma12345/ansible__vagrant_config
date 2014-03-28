@@ -35,26 +35,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
- # config.vm.provider :virtualbox do |vb|
- #   vb.customize ["modifyvm", :id, "--memory", "1024", "--name", "ansible-plaything"]
- # end
-
-  # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "precise32"
   config.vm.box_url = "http://files.vagrantup.com/precise32.box"
-
-
-  config.vm.network "forwarded_port", host: 8000, guest: 8000
-  config.vm.network :private_network, ip: "192.168.100.1"
-  # config.vm.network :private_network, ip: "127.0.0.2"
-  #  config.vm.network :public_network
-
-  config.vm.provision "shell", inline: $shell
-
-  config.vm.provision "ansible" do |ansible|
-      ansible.playbook = "provisioning/playbook.yml"
-      ansible.inventory_path = "provisioning/hosts-vagrant"
-      ansible.verbose = true
+  config.vm.provider "virtualbox" do |virtualbox|
+        virtualbox.name = "cb_boy"
+        # virtualbox.customize ["modifyvm", :id, "--memory", "1024", "--name", "ansible-plaything", "--cpuexecutioncap", "50"]
+        # virtualbox.gui = true
   end
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.network :public_network
+  config.vm.network "forwarded_port", host: 8000, guest: 8000
+  # config.vm.network :private_network, ip: "192.168.100.2"
+  # config.vm.network :private_network, ip: "127.0.0.2"
+
+  config.vm.provision "shell", :path => "ansible/bootstrap.sh"
+  config.vm.boot_timeout = 20
 end
-# I want the server to run in localhost in vagrant, the port forward to host locahost port 80
